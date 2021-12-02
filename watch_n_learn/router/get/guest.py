@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.responses import RedirectResponse
 from fastapi.routing import APIRouter
 
+from watch_n_learn.authentication.main import JWT_NAME
 from watch_n_learn.helper.template import TEMPLATE
 from watch_n_learn.helper.template import flash
 from watch_n_learn.helper.token import get_user
@@ -19,7 +20,7 @@ async def index(request_: Request) -> HTMLResponse:
 
     if user is None:
         response = TEMPLATE.TemplateResponse("guest/index.jinja2", {"request": request_})
-        response.delete_cookie("authentication_token")
+        response.delete_cookie(JWT_NAME)
 
         return response
 
@@ -32,7 +33,7 @@ async def logout(request_: Request) -> RedirectResponse:
 
     response = RedirectResponse("/", status.HTTP_302_FOUND)
 
-    response.delete_cookie("authentication_token")
+    response.delete_cookie(JWT_NAME)
 
     if user is not None:
         flash(request_, "You have logged out")
@@ -46,7 +47,7 @@ async def login(request_: Request) -> Union[HTMLResponse, RedirectResponse]:
 
     if user is None:
         response = TEMPLATE.TemplateResponse("guest/login.jinja2", {"request": request_})
-        response.delete_cookie("authentication_token")
+        response.delete_cookie(JWT_NAME)
 
         return response
 
@@ -59,7 +60,7 @@ async def sign_up(request_: Request) -> Union[HTMLResponse, RedirectResponse]:
 
     if user is None:
         response = TEMPLATE.TemplateResponse("guest/sign_up.jinja2", {"request": request_})
-        response.delete_cookie("authentication_token")
+        response.delete_cookie(JWT_NAME)
 
         return response
 

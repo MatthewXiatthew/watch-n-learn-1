@@ -21,21 +21,39 @@
 
         <header>
             <nav>
-                <a href="/">Home</a>
+                <ul>
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                </ul>
                 {% if user is defined() %}
-                    <a href="/internal/logout">Logout</a>
+                    <ul>
+                        <li>
+                            <a href="/internal/logout">Logout</a>
+                        </li>
+                    </ul>
                 {% else %}
-                    <a href="/sign-up">Sign up</a>
-                    <a href="/login">Log in</a>
+                    <ul>
+                        <li>
+                            <a href="/sign-up">Sign Up</a>
+                        </li>
+                        <li>
+                            <a href="/login">Login</a>
+                        </li>
+                    </ul>
                 {% endif %}
             </nav>
-            {% for message in get_flashed_messages(request) %}
-                <p>
-                    {{ message }}
-                    <span onclick="removeParent(this);">&times;</span>
-                </p>
-            {% endfor %}
+                {% for message in get_flashed_messages(request) %}
+                    <div class="flashed_message">
+                        <p>
+                            {{ message }}
+                            <span onclick="removeParent(this);">&times;</span>
+                        </p>
+                    </div>
+                {% endfor %}
         </header>
+
+        <br>
 
         {% block main %}
         {% endblock main %}

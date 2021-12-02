@@ -3,12 +3,13 @@ from typing import Optional
 from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
 
+from watch_n_learn.authentication.main import JWT_NAME
 from watch_n_learn.authentication.main import manager
 from watch_n_learn.database.models import User
 
 async def get_user(request__: Request) -> Optional[User]:
 
-    authentication_token = request__.cookies.get("authentication_token")
+    authentication_token = request__.cookies.get(JWT_NAME)
 
     try:
 

@@ -8,6 +8,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.routing import APIRouter
 from passlib.context import CryptContext
 
+from watch_n_learn.authentication.main import JWT_NAME
 from watch_n_learn.authentication.main import load_user
 from watch_n_learn.authentication.main import manager
 from watch_n_learn.database.main import session
@@ -28,7 +29,10 @@ async def login(request_: Request) -> RedirectResponse:
         flash(request_, "Missing fields")
 
     if isinstance(body, str):
-        flash(request_, f"'{body.capitalize()}' field cannot be empty")
+        if body == "username":
+            flash(request_, "Please enter your username")
+        else:
+            flash(request_, "Please enter your password")
 
         return RedirectResponse("/login", status.HTTP_302_FOUND)
 
@@ -48,7 +52,7 @@ async def login(request_: Request) -> RedirectResponse:
 
     response = RedirectResponse("/", status.HTTP_302_FOUND)
 
-    response.set_cookie("authentication_token", manager.create_access_token(data={"sub": username}))
+    response.set_cookie(JWT_NAME, manager.create_access_token(data={"sub": username}))
 
     flash(request_, "Logged in")
 
@@ -63,12 +67,14 @@ async def sign_up(request_: Request) -> RedirectResponse:
         flash(request_, "Missing fields")
 
     if isinstance(body, str):
-        empty_field = body.capitalize()
         if body == "name":
-            empty_field = "Full name"
-        elif body == "confirm_password":
-            empty_field = "Confirm password"
-        flash(request_, f"'{empty_field}' field can't be empty")
+            flash(request_, "Please enter your full name")
+        elif body == "username":
+            flash(request_, "Please choose a username")
+        elif body == "password":
+            flash(request_, "Please choose a password")
+        else:
+            flash(request_, "Please confirm your password")
 
         return RedirectResponse("/sign-up", status.HTTP_302_FOUND)
 
@@ -136,9 +142,7 @@ async def sign_up(request_: Request) -> RedirectResponse:
 
     response = RedirectResponse("/", status.HTTP_302_FOUND)
 
-    response.set_cookie(
-        "authentication_token", manager.create_access_token(data={"sub": username_})
-    )
+    response.set_cookie(JWT_NAME, manager.create_access_token(data={"sub": username_}))
 
     flash(request_, "You have signed up")
 
