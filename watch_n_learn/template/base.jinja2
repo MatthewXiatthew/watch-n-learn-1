@@ -5,15 +5,11 @@
     <head>
 
         <link rel="icon" href="/static/image/favicon.ico" type="image/x-icon">
-        <link rel="stylesheet" href="/static/css/base.css">
 
         <script src="/static/javascript/base.js"></script>
 
         {% block title %}
         {% endblock title %}
-
-        {% block css %}
-        {% endblock css %}
 
     </head>
 
@@ -21,39 +17,21 @@
 
         <header>
             <nav>
-                <ul>
-                    <li>
-                        <a href="/">Home</a>
-                    </li>
-                </ul>
+                <a href="/">Home</a>
                 {% if user is defined() %}
-                    <ul>
-                        <li>
-                            <a href="/internal/logout">Logout</a>
-                        </li>
-                    </ul>
+                    <a href="/internal/logout">Logout</a>
                 {% else %}
-                    <ul>
-                        <li>
-                            <a href="/sign-up">Sign Up</a>
-                        </li>
-                        <li>
-                            <a href="/login">Login</a>
-                        </li>
-                    </ul>
+                    <a href="/sign-up">Sign up</a>
+                    <a href="/login">Log in</a>
                 {% endif %}
             </nav>
-                {% for message in get_flashed_messages(request) %}
-                    <div class="flashed_message">
-                        <p>
-                            {{ message }}
-                            <span onclick="removeParent(this);">&times;</span>
-                        </p>
-                    </div>
-                {% endfor %}
+            {% for message in get_flashed_messages(request) %}
+                <p style="color:red">
+                    {{ message }}
+                    <span onclick="removeParent(this);">&times;</span>
+                </p>
+            {% endfor %}
         </header>
-
-        <br>
 
         {% block main %}
         {% endblock main %}
